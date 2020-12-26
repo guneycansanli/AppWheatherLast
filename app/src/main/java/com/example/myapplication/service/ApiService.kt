@@ -23,7 +23,7 @@ interface ApiService {
     fun getCityDailyWeather(@Path("woeid", encoded = true) woeid: String?,
                             @Path("date_year", encoded = true) dateYear: String?,
                             @Path("date_month", encoded = true) dateMonth: String?,
-                            @Path("date_day", encoded = true) dateDay: String?): Call<ArrayList<CityDailyWeather>> // return type bu servisin jsonına göre yeni bir model olmalı!!
+                            @Path("date_day", encoded = true) dateDay: String?): Call<CityDailyWeather> // return type bu servisin jsonına göre yeni bir model olmalı!!
 
 
     @GET("api/location/{woeid}/")

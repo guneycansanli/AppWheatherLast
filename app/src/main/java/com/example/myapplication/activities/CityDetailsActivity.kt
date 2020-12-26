@@ -41,8 +41,9 @@ class CityDetailsActivity : AppCompatActivity() {
         initRecylerView()
 
         if (isInternetAvailable()) {  //i.net control
-            getNearCitiesFromApi()
             getCityDailyFromApi()
+            getNearCitiesFromApi()
+
         }
     }
 
@@ -61,21 +62,21 @@ class CityDetailsActivity : AppCompatActivity() {
         Log.d("tarih",year.toString())
         val woeId = woeid.toString()
         val requestCall = ApiClient.apiService.getCityDailyWeather(woeId,year.toString(),month.toString(),day.toString())
-        requestCall.enqueue(object : retrofit2.Callback<ArrayList<CityDailyWeather>>{
-            override fun onResponse(
-                call: Call<ArrayList<CityDailyWeather>>,
-                response: Response<ArrayList<CityDailyWeather>>
-            ) {
+        requestCall.enqueue(object : retrofit2.Callback<CityDailyWeather>{
+            override fun onResponse(call: Call<CityDailyWeather>, response: Response<CityDailyWeather>) {
                 hideProgressBar()
-                val response = response.body()
-                if(response.isNullOrEmpty().not()){
-                    response?.let {
-                        //                     Burda response ile tek bir city geri dönmedi hepsi geri döndü
+                if(response.isSuccessful){
+                    val destination = response.body()
+                    destination?.let{
+                        city_id?.setText(destination.id.toString())
+                        maximum_temp?.setText(destination.maxTemp.toString())          //veri tipi liste veya array list olmadan çağırdım sonuçta 1 city değeri almamız lazım
+                        minimum_temp?.setText(destination.minTemp.toString())
+                        app_date?.setText(destination.applicableDate)
+                        Log.d("cityid",city_id.toString())
                     }
                 }
             }
-
-            override fun onFailure(call: Call<ArrayList<CityDailyWeather>>, t: Throwable) {
+            override fun onFailure(call: Call<CityDailyWeather>, t: Throwable) {
 
             }
 
